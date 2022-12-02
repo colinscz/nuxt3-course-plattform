@@ -21,6 +21,7 @@
           v-for="chapter in chapters"
           :key="chapter.slug"
         >
+          <!-- http://localhost:3000/course/chapter/1-chapter-1/lesson/2-typescript-in-vue-components -->
           <h4>{{ chapter.title }}</h4>
           <NuxtLink
             v-for="(lesson, index) in chapter.lessons"
