@@ -30,8 +30,6 @@
 </template>
 
 <script setup>
-import LessonCompleteButton from '~~/components/LessonCompleteButton.vue'
-
 const course = useCourse()
 
 const route = useRoute()
@@ -52,9 +50,7 @@ const title = computed(() => {
   return `${lesson.value.title} - ${course.title}`
 })
 
-const progress = useState('progress', () => {
-  return []
-})
+const progress = useLocalStorage('progress', [])
 
 const isLessonComplete = computed(() => {
   if (!progress.value[chapter.value.number - 1]) {
