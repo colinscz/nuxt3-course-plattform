@@ -4,7 +4,7 @@
       <h1 class="text-3xl">
         <span class="font-medium">
           Course:
-          <span class="font-bold">{{ title }}</span>
+          <span class="font-bold">{{ course.title }}</span>
         </span>
       </h1>
       <UserCard />
@@ -17,7 +17,7 @@
         <h3>Chapters</h3>
         <div
           class="flex flex-col mb-4 space-y-1"
-          v-for="chapter in chapters"
+          v-for="chapter in course.chapters"
           :key="chapter.slug"
         >
           <!-- http://localhost:3000/course/chapter/1-chapter-1/lesson/2-typescript-in-vue-components -->
@@ -60,12 +60,11 @@
 </template>
 
 <script setup lang="ts">
-const { chapters, title } = useCourse()
+const course = await useCourse()
+const firstLesson = await useFirstLesson()
 
 const resetError = async (error) => {
-  await navigateTo(
-    '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
-  )
+  await navigateTo(firstLesson.path)
   error.value = null
 }
 </script>

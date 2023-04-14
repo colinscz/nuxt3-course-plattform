@@ -35,7 +35,7 @@ const error = useError()
 const handleError = () => {
   clearError({
     redirect:
-      '/course/chapter/1-chapter-1/lesson/1-srgsf-to-typescript-with-vue-js-3',
+      '/course/chapter/1-chapter-1/lesson/1-to-typescript-with-vue-js-3',
   })
 }
 </script>
