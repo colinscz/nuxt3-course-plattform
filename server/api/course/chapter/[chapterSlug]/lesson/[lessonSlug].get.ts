@@ -4,19 +4,25 @@ const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   const { chapterSlug, lessonSlug } = event.context.params
-  return prisma.lesson.findFirst({
+
+  const lesson = await prisma.lesson.findFirst({
     where: {
+      slug: lessonSlug,
       Chapter: {
         slug: chapterSlug,
       },
     },
-    include: {
-      Chapter: {
-        select: {
-          slug: true,
-          title: true,
-        },
-      },
-    },
   })
+
+  if (!lesson) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Lesson not found',
+    })
+  }
+
+  return {
+    ...lesson,
+    path: `/course/chapter/${chapterSlug}/lesson/${lessonSlug}`,
+  }
 })
