@@ -33,58 +33,55 @@
 <script setup>
 import { useCourseProgress } from '~/stores/courseProgress.ts'
 const course = await useCourse()
+const user = useSupabaseUser()
 const route = useRoute()
 const { chapterSlug, lessonSlug } = route.params
 const lesson = await useLesson(chapterSlug, lessonSlug)
 const store = useCourseProgress()
 const { initialize, toggleComplete } = store
-
 initialize()
-
 definePageMeta({
   middleware: [
     async function ({ params }, from) {
       const course = await useCourse()
-
       const chapter = course.value.chapters.find(
         (chapter) => chapter.slug === params.chapterSlug
       )
       if (!chapter) {
-        return abortNavigation({
-          statusCode: 404,
-          message: 'Chapter not found',
-        })
+        return abortNavigation(
+          createError({
+            statusCode: 404,
+            message: 'Chapter not found',
+          })
+        )
       }
-
       const lesson = chapter.lessons.find(
         (lesson) => lesson.slug === params.lessonSlug
       )
-
       if (!lesson) {
-        return abortNavigation({
-          statusCode: 404,
-          message: 'Lesson not found',
-        })
+        return abortNavigation(
+          createError({
+            statusCode: 404,
+            message: 'Lesson not found',
+          })
+        )
       }
     },
     'auth',
   ],
 })
-
+// Check if the current lesson is completed
 const isCompleted = computed(() => {
   return store.progress?.[chapterSlug]?.[lessonSlug] || 0
 })
-
 const chapter = computed(() => {
   return course.value.chapters.find(
     (chapter) => chapter.slug === route.params.chapterSlug
   )
 })
-
 const title = computed(() => {
   return `${lesson.value.title} - ${course.value.title}`
 })
-
 useHead({
   title,
 })
